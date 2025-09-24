@@ -120,9 +120,10 @@ public class UserService {
         Connection connection = null;
         try {
             // パスワード暗号化
-            String encPassword = CipherUtil.encrypt(user.getPassword());
-            user.setPassword(encPassword);
-
+        	if (user.getPassword() != null) {
+        		String encPassword = CipherUtil.encrypt(user.getPassword());
+                user.setPassword(encPassword);
+        	}
             connection = getConnection();
             new UserDao().update(connection, user);
             commit(connection);
