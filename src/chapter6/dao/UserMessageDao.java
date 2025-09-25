@@ -50,13 +50,17 @@ public class UserMessageDao {
             sql.append("FROM messages ");
             sql.append("INNER JOIN users ");
             sql.append("ON messages.user_id = users.id ");
+            // バインド変数（userがいじれないように）
             if (id != null) {
-            	sql.append("WHERE users.id = " + id  + " ");
+            	sql.append("WHERE users.id = ? ");
             }
+            // numは固定値なのでこのままOK
             sql.append("ORDER BY created_date DESC limit " + num);
 
             ps = connection.prepareStatement(sql.toString());
-
+            if (id != null) {
+            	ps.setInt(1, id);
+            }
             ResultSet rs = ps.executeQuery();
 
             List<UserMessage> messages = toUserMessages(rs);
