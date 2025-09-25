@@ -232,4 +232,31 @@ public class UserDao {
 		}
 	}
 
+	public User select(Connection connection, String account) {
+
+	    PreparedStatement ps = null;
+	    try {
+	        String sql = "SELECT * FROM users WHERE account = ?";
+
+	        ps = connection.prepareStatement(sql);
+	        ps.setString(1, account);
+
+	        ResultSet rs = ps.executeQuery();
+
+	        List<User> users = toUsers(rs);
+
+	        if (users.isEmpty()) { //アカウントがみつからない
+	            return null;
+	        } else if (2 <= users.size()) { //すでに同一アカウント名が2つ以上ある　ユーザーは関係ないので例外処理ヲ出してHTTPエラーを出す
+	            throw new IllegalStateException("ユーザーが重複しています");
+	        } else { //すでにユーザーがいる　ユーザーの入力に問題がある
+	            return users.get(0);
+	        }
+	    } catch (SQLException e) {
+	        throw new SQLRuntimeException(e);
+	    } finally {
+	        close(ps);
+	    }
+	}
+
 }
