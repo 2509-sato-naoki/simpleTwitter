@@ -79,6 +79,10 @@
 						<fmt:formatDate value="${message.createdDate}"
 							pattern="yyyy/MM/dd HH:mm:ss" />
 					</div>
+					<form action="deleteMessage" method="post">
+						<input type="submit" value="削除">
+						<input name="id" type="hidden" value="${message.id}">
+					</form>
 				</div>
 			</c:forEach>
 		</div>
