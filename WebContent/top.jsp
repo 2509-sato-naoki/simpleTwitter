@@ -83,6 +83,10 @@
 						<input type="submit" value="削除">
 						<input name="id" type="hidden" value="${message.id}">
 					</form>
+					<form action="edit" method="get">
+						<input type="submit" value="編集する">
+						<input name="id" type="hidden" value="${message.id}">
+					</form>
 				</div>
 			</c:forEach>
 		</div>
