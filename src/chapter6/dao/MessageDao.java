@@ -160,4 +160,25 @@ public class MessageDao {
 			close(rs);
 		}
 	}
+
+	public void update(Connection connection, int id, String text) {
+		PreparedStatement ps = null;
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("UPDATE messages ");
+			sql.append("SET text = ?");
+			sql.append("WHERE id = ? ");
+
+			ps = connection.prepareStatement(sql.toString());
+			ps.setString(1, text);
+			ps.setInt(2, id);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			log.log(Level.SEVERE, new Object() {
+			}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
 }

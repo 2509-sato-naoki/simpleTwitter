@@ -1,6 +1,8 @@
 package chapter6.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -8,6 +10,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
 
 import chapter6.beans.Message;
 import chapter6.logging.InitApplication;
@@ -39,11 +44,69 @@ public class EditServlet extends HttpServlet {
 				" : " + new Object() {
 				}.getClass().getEnclosingMethod().getName());
 
+		HttpSession session = request.getSession();
 		int id = Integer.parseInt(request.getParameter("id"));
 		Message message = new MessageService().select(id);
-		// もし、messageが取得できない場合の処理を考える必要がある
-		request.setAttribute("message", message);
-        request.getRequestDispatcher("/edit.jsp").forward(request, response);
+
+		session.setAttribute("message", message);
+		request.getRequestDispatcher("/edit.jsp").forward(request, response);
 	}
+
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+
+		log.info(new Object() {
+		}.getClass().getEnclosingClass().getName() +
+				" : " + new Object() {
+				}.getClass().getEnclosingMethod().getName());
+
+		 List<String> errorMessages = new ArrayList<String>();
+		int id = Integer.parseInt(request.getParameter("id"));
+		String text = request.getParameter("text");
+		Message message = getMessage(request);
+
+		// テキストの確認
+		if (!isValid(text, errorMessages)) {
+			request.setAttribute("errorMessages", errorMessages);
+			request.setAttribute("message", message);
+            request.getRequestDispatcher("edit.jsp").forward(request, response);
+            return;
+		}
+
+		new MessageService().update(id, text);
+		response.sendRedirect("./");
+
+	}
+
+	private boolean isValid(String text, List<String> errorMessages) {
+
+		log.info(new Object() {
+		}.getClass().getEnclosingClass().getName() +
+				" : " + new Object() {
+				}.getClass().getEnclosingMethod().getName());
+
+		if (StringUtils.isBlank(text)) {
+			errorMessages.add("メッセージを入力してください");
+		} else if (140 < text.length()) {
+			errorMessages.add("140文字以下で入力してください");
+		}
+
+		if (errorMessages.size() != 0) {
+			return false;
+		}
+		return true;
+	}
+
+	private Message getMessage(HttpServletRequest request) throws IOException, ServletException {
+
+		  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+	        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+
+	        Message message = new Message();
+	        message.setId(Integer.parseInt(request.getParameter("id")));
+	        message.setText(request.getParameter("text"));
+	        return message;
+	    }
 
 }
