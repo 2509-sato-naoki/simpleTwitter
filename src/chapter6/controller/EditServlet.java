@@ -45,11 +45,26 @@ public class EditServlet extends HttpServlet {
 				}.getClass().getEnclosingMethod().getName());
 
 		HttpSession session = request.getSession();
-		int id = Integer.parseInt(request.getParameter("id"));
-		Message message = new MessageService().select(id);
+		List<String> errorMessages = new ArrayList<String>();
+		if (request.getParameter("id").matches("[0-9]+")) {
+			int id = Integer.parseInt(request.getParameter("id"));
+			Message message = new MessageService().select(id);
+			//打鍵テストNo59の修正　メッセージがない場合のidは存在しないつぶやきの数字になっている
+			if (message == null) {
+				errorMessages.add("不正なパラメータが入力されました");
+				session.setAttribute("errorMessages", errorMessages);
+				response.sendRedirect("./");
+				return;
+			}
+			session.setAttribute("message", message);
+			request.getRequestDispatcher("/edit.jsp").forward(request, response);
+		} else {
+			errorMessages.add("不正なパラメータが入力されました");
+			session.setAttribute("errorMessages", errorMessages);
+			response.sendRedirect("./");
+			return;
+		}
 
-		session.setAttribute("message", message);
-		request.getRequestDispatcher("/edit.jsp").forward(request, response);
 	}
 
 	@Override
@@ -61,7 +76,7 @@ public class EditServlet extends HttpServlet {
 				" : " + new Object() {
 				}.getClass().getEnclosingMethod().getName());
 
-		 List<String> errorMessages = new ArrayList<String>();
+		List<String> errorMessages = new ArrayList<String>();
 		int id = Integer.parseInt(request.getParameter("id"));
 		String text = request.getParameter("text");
 		Message message = getMessage(request);
