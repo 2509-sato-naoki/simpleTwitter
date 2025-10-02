@@ -47,19 +47,12 @@ public class EditServlet extends HttpServlet {
 		Message message = null;
 		HttpSession session = request.getSession();
 		List<String> errorMessages = new ArrayList<String>();
-		if (request.getParameter("id") == null) {
-			//ここはパラメータが不正かどうか（idが存在するつぶやきのidか、idが数字かどうか）ではなく、
-			//パラメータが入力されてるかどうか(idがあるかどうか)なので、別のif文で処理をする
-			//エラーメッセージも違うものを用意する？
-			errorMessages.add("パラメータが入力されていません");
-			session.setAttribute("errorMessages", errorMessages);
-			response.sendRedirect("./");
-			return;
-		}
-		if (request.getParameter("id").matches("[0-9]+")) {
+
+		if ( request.getParameter("id") != null && request.getParameter("id").matches("[0-9]+")) {
 			int id = Integer.parseInt(request.getParameter("id"));
 			message = new MessageService().select(id);
 		}
+
 		if (message == null) {
 			errorMessages.add("不正なパラメータが入力されました");
 			session.setAttribute("errorMessages", errorMessages);
@@ -71,25 +64,6 @@ public class EditServlet extends HttpServlet {
 			response.sendRedirect("./");
 			return;
 		}
-
-//		if (request.getParameter("id").matches("[0-9]+")) {
-//			int id = Integer.parseInt(request.getParameter("id"));
-//			Message message = new MessageService().select(id);
-//			//打鍵テストNo59の修正　メッセージがない場合のidは存在しないつぶやきの数字になっている
-//			if (message == null) {
-//				errorMessages.add("不正なパラメータが入力されました");
-//				session.setAttribute("errorMessages", errorMessages);
-//				response.sendRedirect("./");
-//				return;
-//			}
-//			session.setAttribute("message", message);
-//			request.getRequestDispatcher("/edit.jsp").forward(request, response);
-//		} else {
-//			errorMessages.add("不正なパラメータが入力されました");
-//			session.setAttribute("errorMessages", errorMessages);
-//			response.sendRedirect("./");
-//			return;
-//		}
 
 	}
 
@@ -141,16 +115,5 @@ public class EditServlet extends HttpServlet {
 		}
 		return true;
 	}
-
-	private Message getMessage(HttpServletRequest request) throws IOException, ServletException {
-
-		  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
-	        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
-
-	        Message message = new Message();
-	        message.setId(Integer.parseInt(request.getParameter("id")));
-	        message.setText(request.getParameter("text"));
-	        return message;
-	    }
 
 }
