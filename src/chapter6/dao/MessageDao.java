@@ -166,7 +166,8 @@ public class MessageDao {
 		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("UPDATE messages ");
-			sql.append("SET text = ?");
+			sql.append("SET text = ?, ");
+			sql.append("updated_date = CURRENT_TIMESTAMP ");
 			sql.append("WHERE id = ? ");
 
 			ps = connection.prepareStatement(sql.toString());

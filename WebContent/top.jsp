@@ -6,9 +6,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>簡易Twitter</title>
-<link href="./css/style.css" rel="stylesheet" type="text/css">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>簡易Twitter</title>
+	<link href="./css/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<div class="main-contents">
@@ -32,8 +32,7 @@
 					</h2>
 				</div>
 				<div class="account">
-					@
-					<c:out value="${loginUser.account}" />
+					@<c:out value="${loginUser.account}" />
 				</div>
 				<div class="description">
 					<c:out value="${loginUser.description}" />
@@ -66,29 +65,29 @@
 			<c:forEach items="${messages}" var="message">
 				<div class="message">
 					<div class="account-name">
-						<span class="account"> <a
-							href="./?user_id=<c:out value="${message.userId}"/> "> <c:out
-									value="${message.account}" />
-						</a>
-						</span> <span class="name"><c:out value="${message.name}" /></span>
+						<span class="account">
+							<a href="./?user_id=<c:out value="${message.userId}"/> ">
+								<c:out value="${message.account}" />
+							</a>
+						</span>
+						<span class="name">
+							<c:out value="${message.name}" />
+						</span>
 					</div>
 					<div class="text">
 						<pre><c:out value="${message.text}" /></pre>
 					</div>
 					<div class="date">
-						<fmt:formatDate value="${message.createdDate}"
-							pattern="yyyy/MM/dd HH:mm:ss" />
+						<fmt:formatDate value="${message.createdDate}" pattern="yyyy/MM/dd HH:mm:ss" />
 					</div>
 
 					<c:if test="${ not empty loginUser }">
 						<c:if test="${loginUser.id == message.userId}">
 							<form action="deleteMessage" method="post">
-								<input type="submit" value="削除"> <input name="id"
-									type="hidden" value="${message.id}">
+								<input type="submit" value="削除"> <input name="id" type="hidden" value="${message.id}">
 							</form>
 							<form action="edit" method="get">
-								<input type="submit" value="編集する"> <input name="id"
-									type="hidden" value="${message.id}">
+								<input type="submit" value="編集する"> <input name="id" type="hidden" value="${message.id}">
 							</form>
 						</c:if>
 					</c:if>

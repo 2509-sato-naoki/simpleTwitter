@@ -6,10 +6,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<title>簡易Twitterつぶやき編集画面</title>
-<link href="./css/style.css" rel="stylesheet" type="text/css">
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<title>簡易Twitterつぶやき編集画面</title>
+	<link href="./css/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<div class="main-contents">
@@ -41,7 +41,7 @@
 				いま、どうしてる？<br />
 				<textarea name="text" cols="100" rows="5" class="tweet-box">${message.text}</textarea>
 				<br /> <input type="submit" value="つぶやく">（140文字まで）
-				<input type="hidden" name="id"  value="${message.id}">
+				<input type="hidden" name="id" value="${message.id}">
 			</form>
 		</div>
 

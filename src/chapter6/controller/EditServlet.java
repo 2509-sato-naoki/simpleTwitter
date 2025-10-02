@@ -44,26 +44,52 @@ public class EditServlet extends HttpServlet {
 				" : " + new Object() {
 				}.getClass().getEnclosingMethod().getName());
 
+		Message message = null;
 		HttpSession session = request.getSession();
 		List<String> errorMessages = new ArrayList<String>();
-		if (request.getParameter("id").matches("[0-9]+")) {
-			int id = Integer.parseInt(request.getParameter("id"));
-			Message message = new MessageService().select(id);
-			//打鍵テストNo59の修正　メッセージがない場合のidは存在しないつぶやきの数字になっている
-			if (message == null) {
-				errorMessages.add("不正なパラメータが入力されました");
-				session.setAttribute("errorMessages", errorMessages);
-				response.sendRedirect("./");
-				return;
-			}
-			session.setAttribute("message", message);
-			request.getRequestDispatcher("/edit.jsp").forward(request, response);
-		} else {
-			errorMessages.add("不正なパラメータが入力されました");
+		if (request.getParameter("id") == null) {
+			//ここはパラメータが不正かどうか（idが存在するつぶやきのidか、idが数字かどうか）ではなく、
+			//パラメータが入力されてるかどうか(idがあるかどうか)なので、別のif文で処理をする
+			//エラーメッセージも違うものを用意する？
+			errorMessages.add("パラメータが入力されていません");
 			session.setAttribute("errorMessages", errorMessages);
 			response.sendRedirect("./");
 			return;
 		}
+		if (request.getParameter("id").matches("[0-9]+")) {
+			int id = Integer.parseInt(request.getParameter("id"));
+			message = new MessageService().select(id);
+		}
+		if (message == null) {
+			errorMessages.add("不正なパラメータが入力されました");
+			session.setAttribute("errorMessages", errorMessages);
+			response.sendRedirect("./");
+			return;
+		} else {
+			session.setAttribute("message", message);
+			request.getRequestDispatcher("/edit.jsp").forward(request, response);
+			response.sendRedirect("./");
+			return;
+		}
+
+//		if (request.getParameter("id").matches("[0-9]+")) {
+//			int id = Integer.parseInt(request.getParameter("id"));
+//			Message message = new MessageService().select(id);
+//			//打鍵テストNo59の修正　メッセージがない場合のidは存在しないつぶやきの数字になっている
+//			if (message == null) {
+//				errorMessages.add("不正なパラメータが入力されました");
+//				session.setAttribute("errorMessages", errorMessages);
+//				response.sendRedirect("./");
+//				return;
+//			}
+//			session.setAttribute("message", message);
+//			request.getRequestDispatcher("/edit.jsp").forward(request, response);
+//		} else {
+//			errorMessages.add("不正なパラメータが入力されました");
+//			session.setAttribute("errorMessages", errorMessages);
+//			response.sendRedirect("./");
+//			return;
+//		}
 
 	}
 
@@ -79,7 +105,10 @@ public class EditServlet extends HttpServlet {
 		List<String> errorMessages = new ArrayList<String>();
 		int id = Integer.parseInt(request.getParameter("id"));
 		String text = request.getParameter("text");
-		Message message = getMessage(request);
+//		Message message = getMessage(request);
+		Message message = new Message();
+		message.setId(Integer.parseInt(request.getParameter("id")));
+        message.setText(request.getParameter("text"));
 
 		// テキストの確認
 		if (!isValid(text, errorMessages)) {
