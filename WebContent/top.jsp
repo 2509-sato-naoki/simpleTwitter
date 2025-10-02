@@ -84,10 +84,12 @@
 					<c:if test="${ not empty loginUser }">
 						<c:if test="${loginUser.id == message.userId}">
 							<form action="deleteMessage" method="post">
-								<input type="submit" value="削除"> <input name="id" type="hidden" value="${message.id}">
+								<input type="submit" value="削除">
+								<input name="id" type="hidden" value="${message.id}">
 							</form>
 							<form action="edit" method="get">
-								<input type="submit" value="編集する"> <input name="id" type="hidden" value="${message.id}">
+								<input type="submit" value="編集する">
+								<input name="id" type="hidden" value="${message.id}">
 							</form>
 						</c:if>
 					</c:if>

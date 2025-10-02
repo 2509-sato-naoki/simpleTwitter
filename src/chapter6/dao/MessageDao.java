@@ -161,8 +161,10 @@ public class MessageDao {
 		}
 	}
 
-	public void update(Connection connection, int id, String text) {
+	public void update(Connection connection, Message message) {
 		PreparedStatement ps = null;
+		String text = message.getText();
+		int id = message.getId();
 		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("UPDATE messages ");

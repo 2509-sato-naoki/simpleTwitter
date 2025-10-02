@@ -48,7 +48,7 @@ public class EditServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		List<String> errorMessages = new ArrayList<String>();
 
-		if ( request.getParameter("id") != null && request.getParameter("id").matches("[0-9]+")) {
+		if (request.getParameter("id") != null && request.getParameter("id").matches("^[0-9]+$")) {
 			int id = Integer.parseInt(request.getParameter("id"));
 			message = new MessageService().select(id);
 		}
@@ -79,7 +79,6 @@ public class EditServlet extends HttpServlet {
 		List<String> errorMessages = new ArrayList<String>();
 		int id = Integer.parseInt(request.getParameter("id"));
 		String text = request.getParameter("text");
-//		Message message = getMessage(request);
 		Message message = new Message();
 		message.setId(Integer.parseInt(request.getParameter("id")));
         message.setText(request.getParameter("text"));
@@ -92,7 +91,7 @@ public class EditServlet extends HttpServlet {
             return;
 		}
 
-		new MessageService().update(id, text);
+		new MessageService().update(message);
 		response.sendRedirect("./");
 
 	}
