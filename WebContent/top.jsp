@@ -94,6 +94,36 @@
 						</c:if>
 					</c:if>
 				</div>
+
+				<c:if test="${ not empty loginUser }">
+					<form action="comment" method="post">
+						返信<br />
+						<textarea name="text" cols="100" rows="5" class="tweet-box"></textarea>
+						<br /> <input type="submit" value="返信する">（140文字まで）
+						<input name="id" type="hidden" value="${message.id}">
+					</form>
+				</c:if>
+
+				<c:forEach items="${userComments}" var="usercomment">
+					<c:if test="${usercomment.messageId == message.id}">
+						<div class="account-name">
+							<span class="account">
+								<a href="./?user_id=<c:out value="${usercomment.userId}"/> ">
+									<c:out value="${usercomment.account}" />
+								</a>
+							</span>
+							<span class="name">
+								<c:out value="${usercomment.name}" />
+							</span>
+							<div class="text">
+								<pre><c:out value="${usercomment.text}" /></pre>
+							</div>
+							<div class="date">
+								<fmt:formatDate value="${usercomment.createdDate}" pattern="yyyy/MM/dd HH:mm:ss" />
+							</div>
+						</div>
+					</c:if>
+				</c:forEach>
 			</c:forEach>
 		</div>
 
