@@ -9,6 +9,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>簡易Twitter</title>
 	<link href="./css/style.css" rel="stylesheet" type="text/css">
+	<script src="./js/jquery-3.7.1.js"></script>
+	<script src="./js/main.js?2024"></script>
 </head>
 <body>
 	<div class="main-contents">
@@ -92,7 +94,7 @@
 					<c:if test="${ not empty loginUser }">
 						<c:if test="${loginUser.id == message.userId}">
 							<form action="deleteMessage" method="post">
-								<input type="submit" value="削除">
+								<input type="submit" value="削除" class="delete_btn">
 								<input name="id" type="hidden" value="${message.id}">
 							</form>
 							<form action="edit" method="get">
