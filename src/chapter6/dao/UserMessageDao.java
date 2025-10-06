@@ -48,23 +48,20 @@ public class UserMessageDao {
             sql.append("FROM messages ");
             sql.append("INNER JOIN users ");
             sql.append("ON messages.user_id = users.id ");
+          //sql.append("AND messages.created_date BETWEEN 'startDate' endDate ");
+            sql.append("WHERE messages.created_date BETWEEN ? AND ? ");
             // バインド変数（userがいじれないように）
             if (id != null) {
-            	sql.append("WHERE users.id = ? ");
+            	sql.append("AND users.id = ? ");
             }
-            //sql.append("AND messages.created_date BETWEEN '2020-01-01 00:00:00' AND CURRENT_TIMESTAMP ");
-        	sql.append("AND messages.created_date BETWEEN ? AND ? ");
             // numは固定値なのでこのままOK
             sql.append("ORDER BY created_date DESC limit " + num);
 
             ps = connection.prepareStatement(sql.toString());
+            ps.setString(1, startDate);
+        	ps.setString(2, endDate);
             if (id != null) {
-            	ps.setInt(1, id);
-            	ps.setString(2, startDate);
-            	ps.setString(3, endDate);
-            } else {
-            	ps.setString(1, startDate);
-            	ps.setString(2, endDate);
+            	ps.setInt(3, id);
             }
             ResultSet rs = ps.executeQuery();
 
