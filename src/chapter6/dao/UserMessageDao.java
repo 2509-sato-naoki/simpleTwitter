@@ -48,7 +48,7 @@ public class UserMessageDao {
             sql.append("FROM messages ");
             sql.append("INNER JOIN users ");
             sql.append("ON messages.user_id = users.id ");
-          //sql.append("AND messages.created_date BETWEEN 'startDate' endDate ");
+            //sql.append("AND messages.created_date BETWEEN 'startDate' endDate ");
             sql.append("WHERE messages.created_date BETWEEN ? AND ? ");
             // バインド変数（userがいじれないように）
             if (id != null) {
