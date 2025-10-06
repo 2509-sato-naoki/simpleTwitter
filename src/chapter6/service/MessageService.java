@@ -111,7 +111,8 @@ public class MessageService {
 		        // Dateオブジェクトをフォーマットして文字列に変換
 		        endDate = sdf.format(date);
 			} else {
-				endDate = endDate + " 00:00:00";
+				//endDateの日にちを取得するために23:59:59を追加　追加しないとその日のつぶやきが取得できない
+				endDate = endDate + " 23:59:59";
 			}
 
 			List<UserMessage> messages = new UserMessageDao().select(connection, id, LIMIT_NUM, startDate, endDate);
