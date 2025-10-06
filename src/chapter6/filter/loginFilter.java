@@ -1,6 +1,8 @@
 package chapter6.filter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -26,8 +28,10 @@ public class loginFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest)request;
 		HttpServletResponse res = (HttpServletResponse)response;
 	    User user = (User) req.getSession().getAttribute("loginUser");
-
+	    List<String> errorMessages = new ArrayList<String>();
 	    if (user == null) {
+	    	errorMessages.add("ログインしてください");
+	    	req.getSession().setAttribute("errorMessages", errorMessages);
 	    	res.sendRedirect("./login");
 	    	return;
 	    }

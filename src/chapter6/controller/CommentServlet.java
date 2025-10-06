@@ -54,7 +54,7 @@ public class CommentServlet extends HttpServlet {
 
 		//返信用のテキストがちゃんとした入力してあるかをisValidメソッドで確認
 		if (!isValid(text, errorMessages)) {
-			request.setAttribute("errorMessages", errorMessages);
+			session.setAttribute("errorMessages", errorMessages);
 			response.sendRedirect("./");
             return;
 		}

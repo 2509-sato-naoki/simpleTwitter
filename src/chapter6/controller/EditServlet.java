@@ -59,9 +59,9 @@ public class EditServlet extends HttpServlet {
 			response.sendRedirect("./");
 			return;
 		} else {
-			session.setAttribute("message", message);
+			request.setAttribute("message", message);
 			request.getRequestDispatcher("/edit.jsp").forward(request, response);
-			response.sendRedirect("./");
+//			response.sendRedirect("./");
 			return;
 		}
 

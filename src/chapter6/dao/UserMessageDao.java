@@ -29,10 +29,8 @@ public class UserMessageDao {
     public UserMessageDao() {
         InitApplication application = InitApplication.getInstance();
         application.init();
-
     }
-
-    public List<UserMessage> select(Connection connection, Integer id, int num) {
+    public List<UserMessage> select(Connection connection, Integer id, int num, String startDate, String endDate) {
 
 	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
         " : " + new Object(){}.getClass().getEnclosingMethod().getName());
@@ -53,6 +51,10 @@ public class UserMessageDao {
             // バインド変数（userがいじれないように）
             if (id != null) {
             	sql.append("WHERE users.id = ? ");
+//            	sql.append("AND messages.created_date BETWEEN '2020-01-01 00:00:00' AND CURRENT_TIMESTAMP ");
+            	sql.append("AND messages.created_date BETWEEN " + "'" + startDate + "'" + " AND " + "'" + endDate +  "' ");
+            } else {
+            	sql.append("AND messages.created_date BETWEEN " + "'" + startDate + "'" + " AND " + "'" + endDate +  "' ");
             }
             // numは固定値なのでこのままOK
             sql.append("ORDER BY created_date DESC limit " + num);
@@ -89,7 +91,6 @@ public class UserMessageDao {
                 message.setAccount(rs.getString("account"));
                 message.setName(rs.getString("name"));
                 message.setCreatedDate(rs.getTimestamp("created_date"));
-
                 messages.add(message);
             }
             return messages;

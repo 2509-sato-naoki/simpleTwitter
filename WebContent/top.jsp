@@ -24,6 +24,14 @@
 			</c:if>
 		</div>
 
+		<div class="time">
+		<form action="" method="get">
+			<input type="date" name="start_date" value="${startDate}">
+			<input type="date" name="end_date" value="${endDate}">
+			<br /> <input type="submit" value="検索する">
+		</form>
+		</div>
+
 		<c:if test="${ not empty loginUser }">
 			<div class="profile">
 				<div class="name">
@@ -115,6 +123,7 @@
 							<span class="name">
 								<c:out value="${usercomment.name}" />
 							</span>
+							<small>これは返信テキストです</small><br>
 							<div class="text">
 								<pre><c:out value="${usercomment.text}" /></pre>
 							</div>

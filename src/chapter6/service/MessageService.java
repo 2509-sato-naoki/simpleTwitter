@@ -4,6 +4,9 @@ import static chapter6.utils.CloseableUtil.*;
 import static chapter6.utils.DBUtil.*;
 
 import java.sql.Connection;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,7 +63,7 @@ public class MessageService {
 		}
 	}
 
-	public List<UserMessage> select(String userId) {
+	public List<UserMessage> select(String userId, String startDate, String endDate) {
 
 		log.info(new Object() {
 		}.getClass().getEnclosingClass().getName() +
@@ -87,7 +90,31 @@ public class MessageService {
 			* idがnullだったら全件取得する
 			* idがnull以外だったら、その値に対応するユーザーIDの投稿を取得する
 			*/
-			List<UserMessage> messages = new UserMessageDao().select(connection, id, LIMIT_NUM);
+
+			//初めの日にち
+			if (StringUtils.isBlank(startDate)) {
+				startDate = "2020-01-01 00:00:00";
+			} else {
+				startDate = startDate + " 00:00:00";
+			}
+
+			//終わりの日にち
+			if (StringUtils.isBlank(endDate)) {
+				Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+		        // TimestampをDateに変換
+		        Date date = timestamp;
+
+		        // フォーマットパターンを指定してSimpleDateFormatを生成
+		        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // 例: 日本語でのフォーマット
+
+		        // Dateオブジェクトをフォーマットして文字列に変換
+		        endDate = sdf.format(date);
+			} else {
+				endDate = endDate + " 00:00:00";
+			}
+
+			List<UserMessage> messages = new UserMessageDao().select(connection, id, LIMIT_NUM, startDate, endDate);
 
 			return messages;
 		} catch (RuntimeException e) {
